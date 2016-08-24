@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+       default-lazy-init="false">
+    <context:annotation-config/>
+    <context:property-placeholder file-encoding="UTF-8" ignore-resource-not-found="true"
+                                  location="classpath:config.properties"/>
+
+    <bean id="dubboApplicationConfig" class="com.alibaba.dubbo.config.ApplicationConfig">
+        <property name="name" value="product"/>
+    </bean>
+
+    <bean id="dubboRegistryConfig" class="com.alibaba.dubbo.config.RegistryConfig">
+        <property name="address" value="${dubbo.registry.url}"/>
+    </bean>
+
+    <bean id="dubboProtocolConfig" class="com.alibaba.dubbo.config.ProtocolConfig">
+        <property name="port" value="-1"/>
+    </bean>
+
+    <bean id="vendorService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.vendor.api.VendorService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="productService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.ProductService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="categoryService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.CategoryService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="fcategoryService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.fcategory.api.FCategoryService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="keyValueService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.keyvalue.api.KeyValueService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean class="com.yit.product.service.TestAction" init-method="start">
+    </bean>
+
+</beans>

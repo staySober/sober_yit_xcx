@@ -10,7 +10,7 @@
                                   location="classpath:config.properties"/>
 
     <bean id="dubboApplicationConfig" class="com.alibaba.dubbo.config.ApplicationConfig">
-        <property name="name" value="product"/>
+        <property name="name" value="test"/>
     </bean>
 
     <bean id="dubboRegistryConfig" class="com.alibaba.dubbo.config.RegistryConfig">

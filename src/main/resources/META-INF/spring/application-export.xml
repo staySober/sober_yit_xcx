@@ -66,6 +66,42 @@
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
 
+    <bean id="fileService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.file.api.FileService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="brandService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.BrandService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="orderService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.order.api.OrderService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="emailService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.mail.api.EmailService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
     <bean class="com.yit.product.service.TestAction" init-method="start">
     </bean>
 

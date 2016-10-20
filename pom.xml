@@ -65,6 +65,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.yit</groupId>
+            <artifactId>disconf-client</artifactId>
+            <version>2.6.35-yit</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.7</version>
@@ -79,13 +85,25 @@
         <dependency>
             <groupId>com.yit</groupId>
             <artifactId>vendor-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yit</groupId>
+            <artifactId>tool-api</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yit</groupId>
+            <artifactId>vendor-api</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.yit</groupId>
             <artifactId>product-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -145,7 +163,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.2</version>
+            <version>4.5.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -158,6 +176,7 @@
             <artifactId>httpmime</artifactId>
             <version>4.3.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>

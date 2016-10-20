@@ -25,7 +25,6 @@
         <property name="interface" value="com.yit.vendor.api.VendorService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -34,7 +33,6 @@
         <property name="interface" value="com.yit.product.api.ProductService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -43,7 +41,6 @@
         <property name="interface" value="com.yit.product.api.CategoryService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -52,7 +49,6 @@
         <property name="interface" value="com.yit.fcategory.api.FCategoryService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -61,7 +57,6 @@
         <property name="interface" value="com.yit.keyvalue.api.KeyValueService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -70,7 +65,6 @@
         <property name="interface" value="com.yit.file.api.FileService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -79,7 +73,6 @@
         <property name="interface" value="com.yit.product.api.BrandService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -88,7 +81,6 @@
         <property name="interface" value="com.yit.order.api.OrderService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>
@@ -97,7 +89,14 @@
         <property name="interface" value="com.yit.mail.api.EmailService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
-        <property name="timeout" value="${dubbo.export.timeout}"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="announcementService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.announcement.api.AnnouncementService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
     </bean>

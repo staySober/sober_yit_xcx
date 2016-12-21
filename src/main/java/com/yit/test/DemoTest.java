@@ -1,4 +1,4 @@
-package com.yit.product.service;
+package com.yit.test;
 
 // region Import
 
@@ -71,11 +71,7 @@ import java.util.stream.Collectors;
 
 // endregion Import
 
-public class TestAction extends BaseTest {
-
-    public static void main(String[] args) throws Exception{
-        com.alibaba.dubbo.container.Main.main(args);
-    }
+public class DemoTest extends BaseTest {
 
     // region 依赖
 
@@ -84,13 +80,11 @@ public class TestAction extends BaseTest {
 
     // endregion 依赖
 
-    public void start() throws Exception {
-        exec(() -> run());
-        while (true) {
-            Thread.sleep(100000);
-        }
+    public static void main(String[] args) throws Exception {
+        new DemoTest();
     }
 
+    @Override
     public void run() throws Exception {
         Object result = null;
 

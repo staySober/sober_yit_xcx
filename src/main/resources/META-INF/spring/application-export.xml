@@ -21,8 +21,8 @@
         <property name="port" value="-1"/>
     </bean>
 
-    <bean class="com.yit.product.service.TestAction" init-method="start">
-    </bean>
+    <bean class="com.yit.test.DemoTest" init-method="start" />
+    <bean class="com.yit.test.DemoTest2" init-method="start" />
 
     <bean id="demoTestService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
         <property name="interface" value="com.yit.demo.api.DemoTestService"/>

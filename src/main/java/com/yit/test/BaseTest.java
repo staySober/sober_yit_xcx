@@ -1,4 +1,4 @@
-package com.yit.product.service;
+package com.yit.test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,7 +14,32 @@ import java.util.Date;
 /**
  * 帮助测试类
  */
-public class BaseTest {
+public abstract class BaseTest {
+
+    // region 公共方法
+
+    static BaseTest _this;
+    public BaseTest() {
+        if (_this == null) {
+            _this = this;
+            com.alibaba.dubbo.container.Main.main(new String[0]);
+        }
+    }
+
+    public void start() throws Exception {
+        if (this.getClass() != _this.getClass()) {
+            return;
+        }
+
+        exec(() -> run());
+        while (true) {
+            Thread.sleep(100000);
+        }
+    }
+
+    public abstract void run() throws Exception;
+
+    // endregion 公共方法
 
     // region 帮助方法
 

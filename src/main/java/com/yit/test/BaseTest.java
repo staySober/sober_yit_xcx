@@ -18,16 +18,14 @@ public abstract class BaseTest {
 
     // region 公共方法
 
-    static BaseTest _this;
-    public BaseTest() {
-        if (_this == null) {
-            _this = this;
-            com.alibaba.dubbo.container.Main.main(new String[0]);
-        }
+    static Class testClass;
+    public static void runTest(Class clazz) {
+        testClass = clazz;
+        com.alibaba.dubbo.container.Main.main(new String[0]);
     }
 
     public void start() throws Exception {
-        if (this.getClass() != _this.getClass()) {
+        if (this.getClass() != testClass) {
             return;
         }
 

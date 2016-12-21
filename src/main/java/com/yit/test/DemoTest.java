@@ -81,7 +81,7 @@ public class DemoTest extends BaseTest {
     // endregion 依赖
 
     public static void main(String[] args) throws Exception {
-        new DemoTest();
+        runTest(DemoTest.class);
     }
 
     @Override

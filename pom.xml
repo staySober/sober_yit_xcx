@@ -79,30 +79,36 @@
         <dependency>
             <groupId>com.yit</groupId>
             <artifactId>common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.yit</groupId>
-            <artifactId>vendor-api</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.4.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.yit</groupId>
             <artifactId>tool-api</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.3.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.yit</groupId>
             <artifactId>vendor-api</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.3.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.yit</groupId>
             <artifactId>product-api</artifactId>
+            <version>1.4.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yit</groupId>
+            <artifactId>demoproject-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.yit</groupId>
+            <artifactId>quartz-api</artifactId>
             <version>1.1.0-SNAPSHOT</version>
         </dependency>
 
@@ -361,23 +367,6 @@
             <groupId>com.aliyun.openservices</groupId>
             <artifactId>ons-client</artifactId>
             <version>1.1.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.taobao.diamond</groupId>
-            <artifactId>diamond-client</artifactId>
-            <version>3.7.0-sopen</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>diamond-utils</artifactId>
-                    <groupId>com.taobao.diamond</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.taobao.diamond</groupId>
-            <artifactId>diamond-utils</artifactId>
-            <version>3.2.0</version>
         </dependency>
 
         <dependency>

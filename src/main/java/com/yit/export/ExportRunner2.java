@@ -41,17 +41,17 @@ public class ExportRunner2 extends BaseTest {
 
     List<Integer> removeSpuIdList;
     List<Integer> removeSkuIdList;
-   /* List<Integer> alreadyImportSkuList;*/
+    List<Integer> alreadyImportSkuList;
     List<SPUInfo> sourceList = new ArrayList<>();
-  /*  Map<String, List<SPUInfo>> exportDatas = new HashMap<>();*/
+    Map<String, List<SPUInfo>> exportDatas = new HashMap<>();
 
     @Override
     public void run() throws Exception {
-        removeSpuIdList = getSpuSaleInfo();
-        removeSkuIdList = getRemoveSkuIdList2();
+       /* removeSpuIdList = getSpuSaleInfo();
+        removeSkuIdList = getRemoveSkuIdList2();*/
         //removeSkuIdList = getRemoveSkuIdList();
         //alreadyImportSkuList = getAlreadyImportSkuList();
-        doExport3();
+        doExport2();
         System.out.println("=========================SUCCESS=========================");
     }
 
@@ -170,6 +170,7 @@ public class ExportRunner2 extends BaseTest {
             + "left join yitiao_product_spu_owner o on o.spu_id = spu.id "
             + "left join yitiao_admin bd on bd.id = o.bd_owner_id "
              /*" where spu.id not in(?) and sku.id not in (?) "*/
+            + " where spu.name not like '%测试%' "
             + "order by spu.id, sku.id";
 
         //剔除掉已经导入的一部分
@@ -195,9 +196,10 @@ public class ExportRunner2 extends BaseTest {
         });
 
 
-        List<SPUInfo> newSourceList = sourceList.stream().filter(spuInfo -> !removeSpuIdList.contains(spuInfo.spuId))
-            .filter(
-                spuInfo -> !removeSkuIdList.contains(spuInfo.skUId)).collect(Collectors.toList());
+        List<SPUInfo> newSourceList = sourceList.stream()
+                                                .filter(spuInfo -> !removeSpuIdList.contains(spuInfo.spuId))
+                                                .filter(spuInfo -> !removeSkuIdList.contains(spuInfo.skUId))
+                                                .collect(Collectors.toList());
 
         ExportTable exportTable = new ExportTable();
         for (SPUInfo spuInfo : newSourceList) {
@@ -223,7 +225,7 @@ public class ExportRunner2 extends BaseTest {
     /**
      * 发货时间过期(发货日期在8月1号之前)的剔除
      */
-  /*  public List<Integer> getRemoveSkuIdList() {
+    public List<Integer> getRemoveSkuIdList() {
         List<Integer> removeSkuList = new ArrayList<>();
         String sql = "select id from yitiao_product_sku where "
             + "(option_text like '%2016%' "
@@ -243,12 +245,12 @@ public class ExportRunner2 extends BaseTest {
 
         System.out.println("发货时间过期(发货日期在8月1号之前)的剔除");
         return removeSkuList;
-    }*/
+    }
 
     /**
      * 剔除已经导过的SKU
      */
- /*   public List<Integer> getAlreadyImportSkuList() {
+    public List<Integer> getAlreadyImportSkuList() {
         List<Integer> removeSkuList = new ArrayList<>();
         String path = "/Users/sober/Desktop/已上架SKU列表-2017-07-28.csv";
         ImportUtil.doImport(path, (row) -> {
@@ -259,11 +261,10 @@ public class ExportRunner2 extends BaseTest {
         System.out.println("剔除已经导过的SKU");
         return removeSkuList;
     }
-*/
     /**
      * 成本数据导出
      */
-  /*  public void doExport() {
+    public void doExport() {
         removeSkuIdList.addAll(alreadyImportSkuList);
 
         String sql = "select "
@@ -336,6 +337,7 @@ public class ExportRunner2 extends BaseTest {
 
     public void doExport2() throws IOException {
         //removeSkuIdList.addAll(alreadyImportSkuList);
+        /*
 
         String sql = "select "
             + "    channel.vendor_name as 发货渠道, "
@@ -361,8 +363,43 @@ public class ExportRunner2 extends BaseTest {
             + "left join yitiao_admin bd on bd.id = o.bd_owner_id "
             + " where sku.is_deleted = 0 and  sku.on_sale = 1 "
             + "order by spu.id, sku.id";
+        */
 
-        sqlHelper.exec(sql, (row) -> {
+        String sql2 = "select "
+            + "    channel.vendor_name as 发货渠道, "
+            + "    ifnull(supplier.company_name, '') as 合同抬头, "
+            + "    supplier.name as 供应商名称, "
+            + "    brand.brand_name as 品牌, "
+            + "    replace(spu.original_name,'', '') as 原商品名, "
+            + "    spu.id as SPU_ID, "
+            + "    sku.id as SKU_ID, "
+            + "    sku.option_text as SKU规格, "
+            + "    concat(replace(spu.original_name,'', ''), '&', sku.option_text) as `商品名&规格`, "
+            + "    sku.vendor_sku_code as 供应商SKU, "
+            + "    cast(sku.price as signed integer) as SKU价格, "
+            + "    cast(sku.market_price as signed integer) as 标签价, "
+            + "    bd.fullname as 所属bd "
+            + "from yitiao_product_spu spu "
+            + "left join yitiao_brand brand on brand.entity_id = spu.brand_id "
+            + "left join yitiao_product_spu_channel spu_channel on spu_channel.spu_id = spu.id "
+            + "left join yitiao_vendor channel on channel.entity_id = spu_channel.channel_id "
+            + "left join yitiao_product_sku sku on sku.spu_id = spu.id "
+            + "left join yitiao_supplier supplier on supplier.id = channel.supplier_id "
+            + "left join yitiao_product_spu_owner o on o.spu_id = spu.id "
+            + "left join yitiao_admin bd on bd.id = o.bd_owner_id "
+            + " where sku.is_deleted = 0  "
+            + " and bd.fullname in ('王丽媛','徐陈宠','孙沁卉','吴梦舒','程振尧') "
+            + " and sku.id in (select "
+            + "distinct (sku_id) "
+            + "from yitiao_product_promotion_sku psku "
+            + "left join yitiao_product_promotion p on p.id = psku.promotion_id  "
+            + "where psku.is_deleted = 0 "
+            + "and case when p.type = 5 then !(psku.end_time < '2017-08-01 00:00:00' or psku.start_time  "
+            + ">'2017-10-01 23:59:59')  "
+            + "         else !(p.end_time < '2017-08-01 00:00:00' or p.start_time > '2017-10-01 23:59:59') end) "
+            + "order by spu.id, sku.id";
+
+        sqlHelper.exec(sql2, (row) -> {
             SPUInfo spuInfo = new SPUInfo();
             spuInfo.contractHead = row.getString("合同抬头");
             spuInfo.supplierName = row.getString("供应商名称");
@@ -384,9 +421,8 @@ public class ExportRunner2 extends BaseTest {
 
         System.out.println("finish");
     }
-*/
     //按照bd名称和供应商分组
-   /* public void sortData() {
+    public void sortData() {
         sourceList.forEach(x -> {
             List<SPUInfo> spuInfos = exportDatas.get(x.bdName + "_" + x.supplierName);
             if (spuInfos == null) {
@@ -398,7 +434,7 @@ public class ExportRunner2 extends BaseTest {
                 exportDatas.put(x.bdName + "_" + x.supplierName, spuInfos);
             }
         });
-    }*/
+    }
 
     public class SPUInfo {
         public String channel;

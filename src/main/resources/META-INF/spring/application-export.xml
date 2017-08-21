@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
        default-lazy-init="false">
     <context:annotation-config/>
     <context:property-placeholder file-encoding="UTF-8" ignore-resource-not-found="true"
                                   location="classpath:config.properties"/>
+
 
     <bean id="dubboApplicationConfig" class="com.alibaba.dubbo.config.ApplicationConfig">
         <property name="name" value="test"/>
@@ -21,15 +22,178 @@
         <property name="port" value="-1"/>
     </bean>
 
-    <bean class="com.yit.test.DemoTest" init-method="start" />
-    <bean class="com.yit.test.DemoTest2" init-method="start" />
+<!--
 
-    <bean id="demoTestService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
-        <property name="interface" value="com.yit.demo.api.DemoTestService"/>
+    <bean id="cacheService" class="com.yit.common.utils.cache.CacheService" />
+    <bean id="keyValueService" class="com.yit.common.utils.keyvalue.KeyValueService" />
+-->
+
+    <bean class="com.yit.test.DemoTest" init-method="start"/>
+    <bean class="com.yit.test.DemoTest2" init-method="start"/>
+    <bean class="com.yit.promotion.PromotionImportUtils" init-method="start"/>
+    <bean class="com.yit.test.ImportExcelTest" init-method="start"/>
+    <bean class="com.yit.promotion.BatchImportPromotionUtils" init-method="start"/>
+    <bean class="com.yit.export.ExportRunner" init-method="start"/>
+    <bean class="com.yit.export.ExportRunner2" init-method="start"/>
+    <bean class="com.yit.export.ExportPromotionRunner" init-method="start"/>
+    <bean class="com.yit.importUtils.CricleImportHelper" init-method="start"/>
+    <bean class="com.yit.importUtils.ImportHelper" init-method="start"/>
+    <bean class="com.yit.deal.replaceChineseImageRunner" init-method="start"/>
+    <bean class="com.yit.promotion.DealPromotionPriceRunner" init-method="start"/>
+
+    <bean class="com.yit.common.utils.file.FileService" id="fileService"/>
+    <bean class="com.yit.common.utils.export.ExportService" id="exportService"/>
+    <bean class="com.yit.common.utils.export.ExportUtil" id="exportUtil"/>
+  <!--  <bean class="com.yit.common.utils.topic.TopicService1" id="topicService1"/>
+    <bean class="com.yit.common.utils.topic.TopicService2" id="topicService2"/>-->
+    <bean id="queueService" class="com.yit.common.utils.queue.QueueService"/>
+
+    <bean id="promotionService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.promotion.api.PromotionService"/>
         <property name="application" ref="dubboApplicationConfig"/>
         <property name="registry" ref="dubboRegistryConfig"/>
         <property name="check" value="false"/>
         <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="saleService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.SalesService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+
+    <bean id="productService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.ProductService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <bean id="mediaService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.MediaService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+       <bean id="jobService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.quartz.api.JobService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+
+
+
+    <bean id="weiboProductService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.WeiBoProductService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+    <!--  <bean id="rmaServiceImpl" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+         <property name="interface" value="com.yit.rma.api.RmaService"/>
+         <property name="application" ref="dubboApplicationConfig"/>
+         <property name="registry" ref="dubboRegistryConfig"/>
+         <property name="check" value="false"/>
+         <property name="version" value="${dubbo.reference.version}"/>
+     </bean>-->
+
+    <bean id="fullSpuService" class="com.alibaba.dubbo.config.spring.ReferenceBean">
+        <property name="interface" value="com.yit.product.api.FullSpuService"/>
+        <property name="application" ref="dubboApplicationConfig"/>
+        <property name="registry" ref="dubboRegistryConfig"/>
+        <property name="check" value="false"/>
+        <property name="version" value="${dubbo.reference.version}"/>
+    </bean>
+
+
+    <!--使用tomcat jdbc pool,仅读写库需要使用事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="transactionUtil" class="com.yit.common.utils.TransactionUtil"/>
+    <bean id="sqlHelper" class="com.yit.common.utils.SqlHelper"/>
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="poolProperties">
+            <bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+                <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="${com.yit.datasource.url}"/>
+                <property name="username" value="${com.yit.datasource.username}"/>
+                <property name="password" value="${com.yit.datasource.password}"/>
+                <property name="jmxEnabled" value="false"/>
+                <property name="testWhileIdle" value="false"/>
+                <property name="initialSize" value="1"/>
+                <property name="maxActive" value="60"/>
+                <property name="maxIdle" value="30"/>
+                <property name="minIdle" value="15"/>
+                <property name="defaultAutoCommit" value="true"/>
+                <property name="maxWait" value="7000"/>
+                <property name="removeAbandoned" value="true"/>
+                <property name="removeAbandonedTimeout" value="60"/>
+                <property name="testOnBorrow" value="true"/>
+                <property name="testOnReturn" value="false"/>
+                <property name="validationQuery" value="SELECT 1"/>
+                <property name="validationInterval" value="60000"/>
+                <property name="validationQueryTimeout" value="3"/>
+                <property name="timeBetweenEvictionRunsMillis" value="300000"/>
+                <property name="minEvictableIdleTimeMillis" value="1800000"/>
+                <property name="jdbcInterceptors"
+                          value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"/>
+            </bean>
+        </property>
+    </bean>
+
+     <bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource2"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <bean id="dataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="poolProperties">
+            <bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+                <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/yit_local_magento"/>
+                <property name="username" value="root"/>
+                <property name="password" value="yit123456"/>
+                <property name="jmxEnabled" value="false"/>
+                <property name="testWhileIdle" value="false"/>
+                <property name="initialSize" value="1"/>
+                <property name="maxActive" value="60"/>
+                <property name="maxIdle" value="30"/>
+                <property name="minIdle" value="15"/>
+                <property name="defaultAutoCommit" value="true"/>
+                <property name="maxWait" value="7000"/>
+                <property name="removeAbandoned" value="true"/>
+                <property name="removeAbandonedTimeout" value="60"/>
+                <property name="testOnBorrow" value="true"/>
+                <property name="testOnReturn" value="false"/>
+                <property name="validationQuery" value="SELECT 1"/>
+                <property name="validationInterval" value="60000"/>
+                <property name="validationQueryTimeout" value="3"/>
+                <property name="timeBetweenEvictionRunsMillis" value="300000"/>
+                <property name="minEvictableIdleTimeMillis" value="1800000"/>
+                <property name="jdbcInterceptors"
+                          value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"/>
+            </bean>
+        </property>
     </bean>
 
 </beans>

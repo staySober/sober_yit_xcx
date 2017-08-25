@@ -52,24 +52,24 @@ public class ExportRunner extends BaseTest {
     }
 
     private void exec() {
-        String sql = "select spu.id as spuId, \n"
-            + "\t\t\t\t spu.original_name as originalName, \n"
-            + "\t\t\t\t sku.id as skuId,\n"
-            + " \t\t\t\t sku.option_text as optionText, \n"
-            + " \t\t\t\t sku.price as price,\n"
-            + " \t\t\t\t sku.market_price as marketPrice,\n"
-            + " \t\t\t\t brand.brand_name as brandName,\n"
+        String sql = "select spu.id as spuId,  "
+            + " spu.original_name as originalName, "
+            + " sku.id as skuId, "
+            + "  sku.option_text as optionText,  "
+            + "  sku.price as price, "
+            + "  sku.market_price as marketPrice, "
+            + "  brand.brand_name as brandName, "
             + "bd.fullname as bdName"
-            + " \t\t\t\t  from \n"
-            + "\t\t\tyitiao_product_sku sku\n"
-            + "\t\t\tleft join yitiao_product_spu spu on sku.spu_id = spu.id\n"
-            + "\t\t\tleft join yitiao_brand brand on spu.brand_id = brand.entity_id\n"
-            + "left join yitiao_product_spu_owner o on o.spu_id = spu.id\n"
-            + "left join yitiao_admin bd on bd.id = o.bd_owner_id"
-            + "\t\t\twhere sku.is_deleted = 0\n"
-            + "\t\t\t\t  and sku.market_price < sku.price\n"
-            + "\t\t\t\t  order by spu.id asc;\n"
-            + "\t\t\t";
+            + "   from  "
+            + " yitiao_product_sku sku "
+            + " left join yitiao_product_spu spu on sku.spu_id = spu.id "
+            + " left join yitiao_brand brand on spu.brand_id = brand.entity_id "
+            + " left join yitiao_product_spu_owner o on o.spu_id = spu.id "
+            + " left join yitiao_admin bd on bd.id = o.bd_owner_id"
+            + " where sku.is_deleted = 0 "
+            + " and spu.id not in(800,18216,22290,30254,18223,27378)"
+            + " and sku.market_price < sku.price "
+            + " order by spu.id asc; ";
         sqlHelper.exec(sql, (row) -> {
             int spuId = row.getInt("spuId");
             String originalName = row.getString("originalName");

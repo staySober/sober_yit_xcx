@@ -40,6 +40,10 @@
     <bean class="com.yit.importUtils.ImportHelper" init-method="start"/>
     <bean class="com.yit.deal.replaceChineseImageRunner" init-method="start"/>
     <bean class="com.yit.promotion.DealPromotionPriceRunner" init-method="start"/>
+    <bean class="com.yit.promotion.GeneratorSqlHepler" init-method="start"/>
+    <bean class="com.yit.promotion.exportPromotionDescRunner" init-method="start"/>
+    <bean class="com.yit.export.ExportRunner3" init-method="start"/>
+    <bean class="com.yit.importUtils.ExportMarketRefRunner" init-method="start"/>
 
     <bean class="com.yit.common.utils.file.FileService" id="fileService"/>
     <bean class="com.yit.common.utils.export.ExportService" id="exportService"/>

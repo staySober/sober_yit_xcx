@@ -47,6 +47,10 @@ public class DealPromotionPriceRunner extends BaseTest {
 
     //为每一个提报数据生成价格配置
     private void generatorPriceConfig() {
+        for (PromotonInfo promotonInfo : promotonInfos) {
+            //获取价格方案id
+            //根据活动类型 设置价格配置
+        }
 
     }
 

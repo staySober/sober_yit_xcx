@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sober
  * @date 2017/08/09
  *
- * 无barcode在售商品导出
+ * 8月份上架或上过架的无barcode在售商品导出
  */
 public class ExportRunner2 extends BaseTest {
     @Autowired
@@ -85,9 +85,9 @@ public class ExportRunner2 extends BaseTest {
             + "left join yitiao_supplier supplier on supplier.id = channel.supplier_id "
             + "left join yitiao_product_spu_owner o on o.spu_id = spu.id "
             + "left join yitiao_admin bd on bd.id = o.bd_owner_id "
-            + " where sku.vendor_sku_code is null "
+            + " where (sku.vendor_sku_code is null or vendor_sku_code = '') "
             + " and spu.id not in(800,18216,22290,30254,18223,27378) "
-            + "order by spu.id, sku.id";
+            + "order by bd.fullname,supplier.company_name,brand.brand_name,spu.original_name";
         ExportTable exportTable = new ExportTable();
 
         sqlHelper.exec(sql, (row) -> {
@@ -138,10 +138,10 @@ public class ExportRunner2 extends BaseTest {
         List<Integer> extraList = new ArrayList<>();
 
         List<Integer> idList = new ArrayList<>();
-        String queryId = "\t\t\t\t\n"
-            + "select id from yitiao_product_spu spu where\n"
-            + "\t\t\t\t created_time < '2017-08-01 00:00:00' \n"
-            + "\t\t\t\t and (on_sale = 0 or not exists(select * from yitiao_product_sku where on_sale = 1 and "
+        String queryId = " "
+            + "select id from yitiao_product_spu spu where "
+            + " created_time < '2017-08-01 00:00:00' "
+            + " and (on_sale = 0 or not exists(select * from yitiao_product_sku where on_sale = 1 and "
             + "is_deleted = 0 and spu_id = spu.id))";
 
         sqlHelper.exec(queryId, (row) -> {
@@ -150,7 +150,7 @@ public class ExportRunner2 extends BaseTest {
         });
 
         for (Integer spuId : idList) {
-            String queryAudit = "select body from yitiao_audit where "
+            String queryAudit = " select body from yitiao_audit where "
                 + "main_type = 'product' and  sub_type = ? and created_time >= '2017-08-01 00:00:00' order by "
                 + "sub_type, created_time";
             final boolean[] outSale = {false};
@@ -175,121 +175,6 @@ public class ExportRunner2 extends BaseTest {
         }
         System.out.println("SPU下架超过1个月的剔除");
         return extraList;
-
-    }
-
-    //查询没日常销售方案的数据
-    public List<Integer> getRemoveSkuIdList2() {
-        List<Integer> removeSkuList = new ArrayList<>();
-        String sql = "SELECT\n"
-            + " t1.sku_id as id\n"
-            + "FROM\n"
-            + " yitiao_price_contract_effective t1,\n"
-            + " yitiao_finance_contract_detail t2,\n"
-            + " yitiao_finance_price_scheme t3,\n"
-            + "    yitiao_finance_contract t4\n"
-            + "WHERE\n"
-            + " t1.contract_detail_id = t2.id\n"
-            + "AND t2.scheme_id = t3.id\n"
-            + "and t3.contract_id = t4.id\n"
-            + "AND t3.scheme_type = 'DAILY_SALE'\n"
-            + "AND t2.is_deleted = 0\n"
-            + "and t4.is_deleted = 0\n"
-            + "AND t3.is_deleted = 0\n"
-            + "and t4.end_time > DATE_ADD(NOW(),INTERVAL 1 day);";
-
-        sqlHelper.exec(sql, (row) -> {
-            int id = row.getInt("id");
-            removeSkuList.add(id);
-        });
-
-        System.out.println("剔除有日常销售方案的sku");
-        return removeSkuList;
-    }
-
-    /**
-     * 供应商名称
-     * 合同主体名称
-     * 合同号
-     * SKU ID
-     * 负责BD
-     * 商品编码Bracode
-     * 商品名&规格
-     * 厂商指导价
-     * 日常售价
-     * 日常结算价格/结算扣点(%)
-     */
-    public void doExport3() {
-        String sql = "select "
-            + "    channel.vendor_name as 发货渠道, "
-            + "    ifnull(supplier.company_name, '') as 合同抬头, "
-            + "    supplier.name as 供应商名称, "
-            + "    brand.brand_name as 品牌, "
-            + "    replace(spu.original_name,'', '') as 原商品名, "
-            + "    spu.id as SPU_ID, "
-            + "    sku.id as SKU_ID, "
-            + "    sku.option_text as SKU规格, "
-            + "    concat(replace(spu.original_name,'', ''), '&', sku.option_text) as `商品名&规格`, "
-            + "    sku.vendor_sku_code as 供应商SKU, "
-            + "    cast(sku.price as signed integer) as SKU价格, "
-            + "    cast(sku.market_price as signed integer) as 标签价, "
-            + "    bd.fullname as 所属bd "
-            + "from yitiao_product_spu spu "
-            + "left join yitiao_brand brand on brand.entity_id = spu.brand_id "
-            + "left join yitiao_product_spu_channel spu_channel on spu_channel.spu_id = spu.id "
-            + "left join yitiao_vendor channel on channel.entity_id = spu_channel.channel_id "
-            + "inner join yitiao_product_sku sku on sku.spu_id = spu.id and sku.is_deleted = 0 "
-            + "left join yitiao_supplier supplier on supplier.id = channel.supplier_id "
-            + "left join yitiao_product_spu_owner o on o.spu_id = spu.id "
-            + "left join yitiao_admin bd on bd.id = o.bd_owner_id "
-            + " where  spu.id not in(800,18216,22290,30254,18223,27378)"
-            + "order by spu.id, sku.id";
-
-        //剔除掉已经导入的一部分
-        sqlHelper.exec(sql, (row) -> {
-            String 供应商名称 = row.getString("供应商名称");
-            String 合同抬头 = row.getString("合同抬头");
-            int sku_id = row.getInt("SKU_ID");
-            String 所属bd = row.getString("所属bd");
-            String 供应商SKU = row.getString("供应商SKU");
-            String 商品名规格 = row.getString("商品名&规格");
-            String 厂商指导价 = row.getString("标签价");
-            int SPUID = row.getInt("SPU_ID");
-            SPUInfo info = new SPUInfo();
-            info.spuId = SPUID;
-            info.productNameAndOption = 商品名规格;
-            info.marketPrice = 厂商指导价;
-            info.supplierName = 供应商名称;
-            info.contractHead = 合同抬头;
-            info.skUId = sku_id;
-            info.bdName = 所属bd;
-            info.vendorSKU = 供应商SKU;
-            sourceList.add(info);
-        });
-
-        List<SPUInfo> newSourceList = sourceList.stream()
-            .filter(spuInfo -> !removeSpuIdList.contains(spuInfo.spuId))
-            .filter(spuInfo -> !removeSkuIdList.contains(spuInfo.skUId))
-            .collect(Collectors.toList());
-
-        ExportTable exportTable = new ExportTable();
-        for (SPUInfo spuInfo : newSourceList) {
-            exportTable.addRow(x -> {
-                //do someThing
-                x.put("供应商名称", spuInfo.supplierName);
-                x.put("合同主体名称", spuInfo.contractHead);
-                x.put("合同号", "");
-                x.put("SKU_ID", spuInfo.skUId);
-                x.put("负责BD", spuInfo.bdName);
-                x.put("商品编码Barcode", spuInfo.vendorSKU);
-                x.put("商品名&规格", spuInfo.productNameAndOption);
-                x.put("厂商指导价", spuInfo.marketPrice);
-                x.put("日常售价", "");
-                x.put("日常结算价格/结算扣点(%)", "");
-            });
-        }
-
-        exportUtil.export(exportTable, ExportType.XLS, "/Users/sober/Desktop/无日常销售方案列表");
 
     }
 
@@ -333,6 +218,8 @@ public class ExportRunner2 extends BaseTest {
         return removeSkuList;
     }
 
+    //bd 分组导出数据
+
     public void doExport2() throws IOException {
 
         String sql2 = "select "
@@ -358,17 +245,7 @@ public class ExportRunner2 extends BaseTest {
             + "left join yitiao_product_spu_owner o on o.spu_id = spu.id "
             + "left join yitiao_admin bd on bd.id = o.bd_owner_id "
             + " where sku.is_deleted = 0  "
-            + " and sku.id in (select "
-            + "distinct (sku_id) "
-            + "from yitiao_product_promotion_sku psku "
-            + "left join yitiao_product_promotion p on p.id = psku.promotion_id  "
-            + "where psku.is_deleted = 0 "
-            + "and spu.id not in(800,18216,22290,30254,18223,27378) "
-            + "and case when p.type = 5 then !(psku.end_time < '2017-08-01 00:00:00' or psku.start_time  "
-            + ">'2017-10-01 23:59:59')  "
-            + "         else !(p.end_time < '2017-08-01 00:00:00' or p.start_time > '2017-10-01 23:59:59') end) "
             + "and spu.id not in(800,18216,22290,30254,18223,27378)  "
-            + "and bd.fullname = '刘琼' "
             + "order by spu.id, sku.id";
 
         sqlHelper.exec(sql2, (row) -> {
@@ -389,7 +266,7 @@ public class ExportRunner2 extends BaseTest {
         sortData();
 
         for (Entry<String, List<SPUInfo>> stringListEntry : exportDatas.entrySet()) {
-
+            EXCELUtils.doExport(stringListEntry.getValue(),stringListEntry.getKey());
         }
 
         System.out.println("finish");

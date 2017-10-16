@@ -32,7 +32,7 @@
     <bean class="com.yit.test.DemoTest2" init-method="start"/>
     <bean class="com.yit.promotion.PromotionImportUtils" init-method="start"/>
     <bean class="com.yit.test.ImportExcelTest" init-method="start"/>
-    <bean class="com.yit.promotion.BatchImportPromotionUtils" init-method="start"/>
+ <!--  <bean class="com.yit.promotion.BatchImportPromotionUtils" init-method="start"/>-->
     <bean class="com.yit.export.ExportRunner" init-method="start"/>
     <bean class="com.yit.export.ExportRunner2" init-method="start"/>
     <bean class="com.yit.export.ExportPromotionRunner" init-method="start"/>
@@ -44,6 +44,14 @@
     <bean class="com.yit.promotion.exportPromotionDescRunner" init-method="start"/>
     <bean class="com.yit.export.ExportRunner3" init-method="start"/>
     <bean class="com.yit.importUtils.ExportMarketRefRunner" init-method="start"/>
+    <bean class="com.yit.generator.CatKingGenerator" init-method="start"/>
+    <bean class="com.yit.export.ExportRunner5" init-method="start"/>
+    <bean class="com.yit.promotion.DealPromotionPrice" init-method="start"/>
+    <bean class="com.yit.promotion.ExportPromotion" init-method="start"/>
+    <bean class="com.yit.generator.GenertorTagSQL" init-method="start"/>
+    <bean class="com.yit.export.ExportRunner7" init-method="start"/>
+    <bean class="com.yit.deal.FixFirstOnSaleTimeRunner" init-method="start"/>
+
 
     <bean class="com.yit.common.utils.file.FileService" id="fileService"/>
     <bean class="com.yit.common.utils.export.ExportService" id="exportService"/>

@@ -127,11 +127,12 @@ public class CricleImportHelper extends BaseTest {
 
     private void exportFile2() throws IOException {
         OutputStream os = new FileOutputStream(new File("/Users/sober/Desktop/第二批标签价sql/skuIds.txt"));
-        for (String i :skuIds) {
-            os.write((i+",").getBytes());
+        for (String i : skuIds) {
+            os.write((i + ",").getBytes());
         }
         os.close();
     }
+
     //导出文件
     private void exportFile() throws Exception {
         OutputStream os = new FileOutputStream(
@@ -177,7 +178,7 @@ public class CricleImportHelper extends BaseTest {
 
     private void spuReload() throws IOException {
         String spuIds = ReadUtils.read(new File("/Users/sober/Desktop/第二批标签价sql/SpuReload.txt"));
-       String[] spuIds2 = spuIds.split(",");
+        String[] spuIds2 = spuIds.split(",");
         int[] ints = Arrays.stream(spuIds2).distinct().mapToInt(x -> Integer.parseInt(x)).toArray();
         jobService.addSpuReloadJob(ints);
         System.out.println("reload success");

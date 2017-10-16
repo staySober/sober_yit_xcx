@@ -30,18 +30,18 @@ public class GeneratorSqlHepler extends BaseTest {
     }
 
     private void generator() throws IOException {
-        String sql = "select \n"
-            + "\t\t\tsku_id as skuId,\n"
-            + "\t\t\toriginal_price as price\n"
-            + "from\n"
-            + "\t\tyitiao_product_promotion_sku psku\n"
-            + "\t\tleft join yitiao_product_sku sku on sku.id = psku.sku_id\n"
-            + "\t\tleft join yitiao_product_spu spu on spu.id = sku.spu_id\n"
-            + "\t\tleft join yitiao_brand brand on brand.entity_id = spu.brand_id\n"
-            + "\t\tWHERE \n"
-            + "\t\t\t\t psku.is_deleted = 0\n"
-            + "\t\t and promotion_id = 12\n"
-            + "\t\t and brand.entity_id in (271,387)";
+        String sql = "select  "
+            + "sku_id as skuId, "
+            + "original_price as price "
+            + "from "
+            + "yitiao_product_promotion_sku psku "
+            + "left join yitiao_product_sku sku on sku.id = psku.sku_id "
+            + "left join yitiao_product_spu spu on spu.id = sku.spu_id "
+            + "left join yitiao_brand brand on brand.entity_id = spu.brand_id "
+            + "WHERE "
+            + " psku.is_deleted = 0 "
+            + " and promotion_id = 12 "
+            + " and brand.entity_id in (271,387)";
         sqlHelper.exec(sql,(row)->{
             String skuId = row.getString("skuId");
             String price = row.getString("price");

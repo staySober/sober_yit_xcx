@@ -6,10 +6,13 @@ import com.yit.common.utils.cache.CacheService;
 import com.yit.common.utils.import2.ImportUtil;
 import com.yit.common.utils.topic.TopicService2;
 import com.yit.entity.ServiceException;
+import com.yit.price.api.inner.InnerPriceService;
+import com.yit.price.entity.PriceCurveEntity;
 import com.yit.product.api.FullSpuService;
 import com.yit.product.api.MediaService;
 import com.yit.product.api.ProductService;
 import com.yit.product.entity.FullSpu;
+import com.yit.product.entity.Product;
 import com.yit.product.entity.ProductInfo;
 import com.yit.product.entity.SkuInfo;
 import com.yit.promotion.api.PromotionService;
@@ -52,12 +55,15 @@ public class DemoTest extends BaseTest {
 
 
 
+
     @Autowired
     MediaService mediaService;
 
     @Autowired
     CacheService cacheService;*/
 
+   @Autowired
+    InnerPriceService innerPriceService;
     //endregion 依赖
 
     @Autowired
@@ -72,7 +78,18 @@ public class DemoTest extends BaseTest {
     @Override
     public void run() throws Exception {
         //testPromotion();
-        testProduct();
+       relaodSpu();
+    }
+
+    private void test1() {
+        boolean b = jobService.addSpuReloadJob(new int[] {34965});
+        Product productById = productService.getProductById(34965);
+        System.out.println(productById);
+    }
+
+    private void testCase() throws ServiceException {
+        boolean system = productService.setProductOnSale(33274, true, "System", 0);
+        System.out.println(system);
     }
 
     private void testProduct() {
@@ -93,76 +110,7 @@ public class DemoTest extends BaseTest {
         });
         int[] spuIds = spuSet.stream().mapToInt(x -> x).toArray();*/
 
-        boolean result = jobService.addSpuReloadJob(new int[]{1139
-,1140
-,1141
-,4694
-,4705
-,4799
-,5152
-,5153
-,5154
-,6108
-,6111
-,6696
-,10287
-,11122
-,11123
-,11124
-,12458
-,13148
-,13152
-,17347
-,17348
-,17349
-,17350
-,19241
-,19242
-,19337
-,19563
-,19920
-,20762
-,21741
-,21742
-,21743
-,21744
-,21745
-,22267
-,22270
-,22271
-,22272
-,24162
-,24163
-,24164
-,24165
-,24255
-,24256
-,24257
-,24258
-,24272
-,24552
-,24760
-,24761
-,24762
-,24763
-,25116
-,25273
-,25274
-,25576
-,25577
-,25578
-,25579
-,26036
-,27613
-,27941
-,27942
-,27943
-,27944
-,27957
-,27958
-,27971
-,27972
-,28781});
+        boolean result = jobService.addSpuReloadJob(new int[]{28966,25093,25092,25085});
         System.out.println(result);
     }
 
@@ -205,4 +153,5 @@ public class DemoTest extends BaseTest {
    */
 
     //endregion testCase
+
 }

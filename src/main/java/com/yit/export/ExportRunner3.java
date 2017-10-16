@@ -14,6 +14,7 @@ import com.yit.common.utils.SqlHelper;
 import com.yit.common.utils.export.ExportTable;
 import com.yit.common.utils.export.ExportType;
 import com.yit.common.utils.export.ExportUtil;
+
 import com.yit.product.entity.Product;
 import com.yit.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class ExportRunner3 extends BaseTest {
     List<Integer> removeSpuList = new ArrayList<>();
     List<Integer> removeSkuList = new ArrayList<>();
     List<SPUInfo> sourceList = new ArrayList<>();
+    Map<String, List<ExportRunner3.SPUInfo>> exportDatas = new HashMap<>();
 
     @Override
     public void run() throws Exception {
@@ -37,6 +39,7 @@ public class ExportRunner3 extends BaseTest {
         export();
     }
 
+    //不分组
     private void export() throws IOException {
 
         String sql = "select "
@@ -62,7 +65,7 @@ public class ExportRunner3 extends BaseTest {
             + "left join yitiao_product_spu_owner o on o.spu_id = spu.id "
             + "left join yitiao_admin bd on bd.id = o.bd_owner_id "
             + "where  "
-            + " spu.id not in(800,18216,22290,30254,18223,27378) "
+            + " spu.id not in(800,8530,18216,22290,30254,18223,27378) "
             + "order by spu.id, sku.id";
 
         sqlHelper.exec(sql, (row) -> {
@@ -84,30 +87,31 @@ public class ExportRunner3 extends BaseTest {
         });
 
         sourceList = sourceList.stream().filter(spuInfo -> !removeSpuList.contains(spuInfo.spuId))
-                                        .filter(spuInfo -> !removeSkuList.contains(spuInfo.skUId))
-                                        .collect(Collectors.toList());
+            .filter(spuInfo -> !removeSkuList.contains(spuInfo.skUId))
+            .collect(Collectors.toList());
 
         ExportTable exportTable = new ExportTable();
         for (SPUInfo info : sourceList) {
-              exportTable.addRow(x -> {
-                    x.put("发货渠道", info.channel);
-                    x.put("合同抬头", info.contractHead);
-                    x.put("供应商名称", info.supplierName);
-                    x.put("品牌", info.brandName);
-                    x.put("原商品名", info.originalName);
-                    x.put("SPU_ID", info.spuId);
-                    x.put("SKU_ID", info.skUId);
-                    x.put("SKU规格", info.skuOption);
-                    x.put("商品名&规格", info.productNameAndOption);
-                    x.put("供应商SKU", info.vendorSKU);
-                    x.put("SKU价格", info.skuPrice);
-                    x.put("标签价", info.marketPrice);
-                    x.put("所属bd", info.bdName);
-                });
+            exportTable.addRow(x -> {
+                x.put("发货渠道", info.channel);
+                x.put("合同抬头", info.contractHead);
+                x.put("供应商名称", info.supplierName);
+                x.put("品牌", info.brandName);
+                x.put("原商品名", info.originalName);
+                x.put("SPU_ID", info.spuId);
+                x.put("SKU_ID", info.skUId);
+                x.put("SKU规格", info.skuOption);
+                x.put("商品名&规格", info.productNameAndOption);
+                x.put("供应商SKU", info.vendorSKU);
+                x.put("SKU价格", info.skuPrice);
+                x.put("标签价", info.marketPrice);
+                x.put("所属bd", info.bdName);
+            });
         }
-        ExportUtil.export(exportTable, ExportType.XLS, "/Users/sober/Desktop/无日常销售方案列表/无日常销售方案商品");
+        ExportUtil.export(exportTable, ExportType.XLS, "/Users/sober/Desktop/8月28导出/无日常销售方案商品2");
 
     }
+
 
     public static void main(String[] args) {
         runTest(ExportRunner3.class);
@@ -203,5 +207,20 @@ public class ExportRunner3 extends BaseTest {
         public String skuPrice;
         public String marketPrice;
         public String bdName;
+    }
+
+    //按照bd名称和供应商分组
+    public void sortData() {
+        sourceList.forEach(x -> {
+            List<ExportRunner3.SPUInfo> spuInfos = exportDatas.get(x.bdName + "_" + x.supplierName);
+            if (spuInfos == null) {
+                spuInfos = new ArrayList<>();
+                spuInfos.add(x);
+                exportDatas.put(x.bdName + "_" + x.supplierName, spuInfos);
+            } else {
+                spuInfos.add(x);
+                exportDatas.put(x.bdName + "_" + x.supplierName, spuInfos);
+            }
+        });
     }
 }

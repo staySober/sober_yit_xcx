@@ -1,3 +1,4 @@
+/*
 package com.yit.promotion;
 
 import java.io.File;
@@ -38,12 +39,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+*/
 /**
  * Created by sober on 2017/6/12.
  *
  * @author sober
  * @date 2017/06/12
- */
+ *//*
+
 public class BatchImportPromotionUtils extends BaseTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PromotionImportUtils.class);
@@ -68,13 +71,15 @@ public class BatchImportPromotionUtils extends BaseTest {
         runTest(BatchImportPromotionUtils.class);
     }
 
-    /**
+    */
+/**
      * 批量提报sku
      *
      * @throws ServiceException
      * @throws ParseException
      * @throws IOException
-     */
+     *//*
+
     private void readPromotionExcel() throws Exception {
         //setup 1准备数据
         List<Promotion> promotionList = preData();
@@ -102,9 +107,11 @@ public class BatchImportPromotionUtils extends BaseTest {
         System.out.println("SUCCESS!===========================");
     }
 
-    /**
+    */
+/**
      * 准备数据
-     */
+     *//*
+
     public List<Promotion> preData() throws Exception {
         //读文件
         File excel = new File(FILE_PATH);
@@ -174,9 +181,11 @@ public class BatchImportPromotionUtils extends BaseTest {
         return promotionList;
     }
 
-    /**
+    */
+/**
      * 校验数据
-     */
+     *//*
+
     private void validateParams(List<Promotion> promotionList, String spuId, String skuId, String promotionName,
                                 String startTime, String endTime, String promotionPrice) throws ServiceException {
         if (StringUtils.isEmpty(spuId)) {
@@ -329,11 +338,14 @@ public class BatchImportPromotionUtils extends BaseTest {
         return spuInfo;
     }
 
-    /**
+    */
+/**
      * 判断2个时间段有没有交集
-     */
+     *//*
+
     private static boolean isOverlap(Date leftStartDate, Date leftEndDate, Date rightStartDate, Date rightEndDate) {
         return !(leftEndDate.before(rightStartDate) || rightEndDate.before(leftStartDate));
     }
 
 }
+*/

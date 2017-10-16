@@ -117,7 +117,6 @@ public class ExportRunner extends BaseTest {
             });
             exportUtil.export(exportTable, ExportType.XLS, location + "/" + thisSkuList.getKey());
         }
-
     }
 
     class ExportSku {
